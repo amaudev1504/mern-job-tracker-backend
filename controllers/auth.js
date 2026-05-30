@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res) => {
     bcrypt.hash(req.body.password, 10) // La méthode bcrypt.hash() permet de hasher un mot de passe afin de le sécuriser. pour un hashage sécurisé, on le hash 10 fois, donc le salt = 10
         .then(hash => {
             const user = new User({
@@ -22,7 +22,7 @@ exports.signup = (req, res, next) => {
         .catch(error => res.status(500).json({ error })); // erreur 500 = erreur de serveur
 };
 
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
     User.findOne({ email: req.body.email })
         .then(user => {
             if(!user) {
@@ -31,13 +31,13 @@ exports.login = (req, res, next) => {
                 bcrypt.compare(req.body.password, user.password)
                     .then(valid => {
                         if(!valid) {
-                            res.status(401).json({ message: "Mot de passe incorrecte" })
+                            res.status(401).json({ message: "Mot de passe incorrect" })
                         } else {
                             res.status(200).json({
                                 userId: user._id,
                                 token: jwt.sign(
                                     { userId: user._id },
-                                    'RANDOM_TOKEN_SECRET',
+                                    process.env.JWT_SECRET,
                                     { expiresIn: '24h' }
                                 )
                             });
@@ -47,4 +47,10 @@ exports.login = (req, res, next) => {
             }
         })
         .catch(error => {res.status(500).json({ error })});
+};
+
+exports.logout = (req, res) => {
+    return res.status(200).json({
+      message: "Utilisateur déconnecté"
+    });
 };

@@ -13,4 +13,4 @@ const savedJobSchema = new mongoose.Schema({
     }
   }, { timestamps: true });
 
-  module.exports('SavedJob', savedJobSchema);
+  module.exports = mongoose.model('SavedJob', savedJobSchema);
