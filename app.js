@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+const companyRoutes = require('./routes/company');
 
 require('dotenv').config(); // config pour pouvoir connecter le fichier .env à mongoose
 
@@ -25,6 +26,7 @@ app.use((req, res, next) => { // middleware pour accepter le Cross Origin Ressou
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/companies', companyRoutes);
 
 
 module.exports = app;

@@ -49,6 +49,7 @@ exports.login = (req, res) => {
         .catch(error => {res.status(500).json({ error })});
 };
 
+// Logout = POST
 exports.logout = (req, res) => {
     return res.status(200).json({
       message: "Utilisateur déconnecté"
